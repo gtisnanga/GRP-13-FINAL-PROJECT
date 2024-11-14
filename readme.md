@@ -19,6 +19,7 @@ The problem is to accurately classify the sentiment of tweets related to **Apple
 ## Business Value
 
 By accurately classifying tweets, our NLP model provides actionable insights to stakeholders, such as:
+
     + Identifying negative sentiment can help companies address issues promptly.
     + Recognizing positive sentiment can guide marketing efforts and reinforce successful strategies.
     + Understanding neutral sentiment can provide context and balance.
@@ -45,23 +46,23 @@ Our NLP model will contribute valuable insights to the real-world problem of und
 ## Data Understanding
 
 ### Data source
-The dataset originates from **CrowdFlower via data.world**. Contributors evaluated tweets related to various brands and products. Specifically:
 
+The dataset originates from **CrowdFlower via data.world**. Contributors evaluated tweets related to various brands and products. Specifically:
 - Each tweet was labeled as expressing **Positive emotion**, **Negative emotion**, **No emotion toward brand or product** or **I can't tell**, toward a brand or product.
 - If emotion was expressed, contributors specified which brand or product was the target.
 
 ### Suitability of the Data
 Here's why this dataset is suitable for our project:
-    - **Relevance**: The data directly aligns with our business problem of understanding Twitter sentiment for Apple and Google products.
-    - **Real-World Context**: The tweets represent actual user opinions, making the problem relevant in practice.
-    - **Multiclass Labels**: We can build both binary (positive/negative) and multiclass (positive/negative/neutral) classifiers using this data.
+- **Relevance**: The data directly aligns with our business problem of understanding Twitter sentiment for Apple and Google products.
+- **Real-World Context**: The tweets represent actual user opinions, making the problem relevant in practice.
+- **Multiclass Labels**: We can build both binary (positive/negative) and multiclass (positive/negative/neutral) classifiers using this data.
 
 ### Dataset Size
 The dataset contains **over 9,000 labeled tweets**. We'll explore its features to gain insights.
 
 ### Descriptive Statistics
 - **tweet_text**: The content of each tweet.
--**is_there_an_emotion_directed_at_a_brand_or_product**: No emotion toward brand or product, Positive emotion, Negative emotion, I can't tell
+- **is_there_an_emotion_directed_at_a_brand_or_product**: No emotion toward brand or product, Positive emotion, Negative emotion, I can't tell
 - **emotion_in_tweet_is_directed_at**: The brand or product mentioned in the tweet.
 
 ### Feature Selection
@@ -83,24 +84,25 @@ These steps facilitate machine learning algorithms to process the emotion variab
 ### Preprocessing 
 
 Prepare data for modeling by:
-    1. Label Encoding: Converted emotion labels into numerical values.
-    2. Vectorization: TF-IDF and CountVectorizer are used to transform text data into numerical vectors.
-    3. SMOTE: Applied SMOTE to handle class imbalance.
-    4. Train test split: To split the data
+1. Label Encoding: Converted emotion labels into numerical values.
+2. Vectorization: TF-IDF and CountVectorizer are used to transform text data into numerical vectors.
+3. SMOTE: Applied SMOTE to handle class imbalance.
+4. Train test split: To split the data
 
 ### Models
 
 The machine learning algorithms used in this section are:
-    1. RandomForest
-    2. Naive Bayes(MultinomialNB)
-    3. LogisticRegression
-    4. Decision Trees
+1. RandomForest
+2. Naive Bayes(MultinomialNB)
+3. LogisticRegression
+4. Decision Trees
+
 We will use the split data to predict which model will achieve the highest accuracy and use it for deployment.
 
 ## Results
 ### Random forest classifier
-
 **Count Vectorisation Results**
+
     Best Random Forest Model (Count Vectorization):
     RandomForestClassifier(n_estimators=200, random_state=42)
 
@@ -109,6 +111,7 @@ We will use the split data to predict which model will achieve the highest accur
     Test Recall (Count Vectorization): 0.705
     
 **TFIDF Vectorisation Results**
+
     Best Random Forest Model (TFIDF Vectorization):
     RandomForestClassifier(random_state=42)
 
@@ -123,8 +126,8 @@ We will use the split data to predict which model will achieve the highest accur
 - The accuracy score is at 84% an improvement from 73.3%. The models' improvement is due to the tuning
 
 ### Naive Bayes / (MultinomialNB) model
-
 **Count Vectorisation Results**
+
     Best Mnb Model (Count Vectorization):
     MultinomialNB(alpha=0.01)
 
@@ -133,6 +136,7 @@ We will use the split data to predict which model will achieve the highest accur
     Test Recall (Count Vectorization): 0.659
 
 **TFIDF Vectorisation Results**
+
     Best Mnb Model (TFIDF Vectorization):
     MultinomialNB(alpha=0.01)
     
@@ -145,8 +149,8 @@ We will use the split data to predict which model will achieve the highest accur
 - Note the improvement from 0.66 to 0.798 for the model using TF-IDF Vectorization
 
 ### Logistic Regression
-
 **Count Vectorisation Results**
+
     Best Logistic Regression Model (Count Vectorization):
     LogisticRegression(C=31.0)
 
@@ -170,8 +174,8 @@ We will use the split data to predict which model will achieve the highest accur
 - Further indication that the TF-IDF vectorization is better
 
 ### Decision Tree
-
 **Count Vectorisation Results**
+
     Best Decision Tree Model (Count Vectorization):
     DecisionTreeClassifier(max_features=5, min_samples_split=5)
     
@@ -180,6 +184,7 @@ We will use the split data to predict which model will achieve the highest accur
     Test Recall (Count Vectorization): 0.693
 
 **TFIDF Vectorisation Results**
+
     Best Decision Tree Model (TFIDF Vectorization):
     DecisionTreeClassifier(max_features=5, min_samples_split=4)
     
