@@ -26,52 +26,63 @@ with open('./models/labels.pkl', 'rb') as file:
 
 # Define the text preprocessing function
 def preprocess_text(text):
-    # Convert to lower case
-    text = text.lower()
-    
-    # Tokenize the text
-    tokens = nltk.word_tokenize(text)
-    
+    text = text.lower()  # Convert to lower case
+    tokens = nltk.word_tokenize(text)  # Tokenize the text
     # Remove punctuation and stop words, and lemmatize the tokens
     cleaned_tokens = [
         lemmatizer.lemmatize(token) 
         for token in tokens 
         if token not in string.punctuation and token not in stop_words
     ]
-    
     return ' '.join(cleaned_tokens)
 
 # Define the vectorization function
 def vectorize(clean_data):
-    # Transform the cleaned text to TF-IDF representation using the loaded vectorizer
-    text_tfidf = vectorizer.transform([clean_data])
-    return text_tfidf
+    return vectorizer.transform([clean_data])  # Transform the cleaned text to TF-IDF
 
 # Define the prediction function
 def predict(tf_data):
-    # Make prediction using the loaded model
     prediction = model.predict(tf_data)
     return label_categories[prediction[0]]
 
-# Define the main function that combines preprocessing, vectorization, and prediction
-def execute_flow(text):
-    clean_texts = preprocess_text(text)
-    vectorized_data = vectorize(clean_data=clean_texts)
-    return predict(vectorized_data)
+# Main function that combines preprocessing, vectorization, and prediction
+def execute_flow(username, product, text):
+    clean_text = preprocess_text(text)
+    vectorized_data = vectorize(clean_text)
+    sentiment = predict(vectorized_data)
+    # Custom response format
+    return f"The user @{username} focused on the product: {product} and said '{text}'\n\nOur model predicted the sentiment to be a {sentiment} emotion!"
 
-# Define the Gradio interface function
-def sentiment_analysis(text):
-    # Run the execute_flow function to get the sentiment prediction
-    return execute_flow(text)
+# Define Gradio interface elements
+with gr.Blocks() as demo:
+    gr.Markdown("<h1 style='text-align: center;'>SentimentFlow</h1>")
+    gr.Markdown(
+        "<p style='text-align: center;'>This application uses Natural Language Processing to analyze the sentiment behind a text.</p>"
+    )
 
-# Set up the Gradio interface
-iface = gr.Interface(
-    fn=sentiment_analysis, 
-    inputs="text", 
-    outputs="text", 
-    title="Sentiment Analysis App",
-    description="Enter a sentence to determine its sentiment category."
-)
+    with gr.Row():
+        with gr.Column():
+            gr.Markdown("### Tweet Here 🐦")
+            username = gr.Textbox(label="Username")
+            product = gr.Dropdown(
+                ["Apple", "Google", "Samsung", "Microsoft"],
+                label="Which product do you want to talk about",
+            )
+            text_input = gr.Textbox(
+                label="Tweet",
+                placeholder="Enter the text you'd like to analyze...",
+            )
+            analyze_button = gr.Button("Analyze", variant="primary")
+
+        with gr.Column():
+            gr.Markdown("### Prediction 🔭")
+            output = gr.Textbox(label="", placeholder="The sentiment prediction will appear here...")
+
+    analyze_button.click(
+        fn=execute_flow,
+        inputs=[username, product, text_input],
+        outputs=output,
+    )
 
 # Launch the Gradio app
-iface.launch()    
+demo.launch(share=True)
