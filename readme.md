@@ -200,3 +200,4 @@ We will use the split data to predict which model will achieve the highest accur
 
 ## Deployment
 
+![sentiment analysis app](https://github.com/user-attachments/assets/711e75e6-d63c-4865-806e-52c9a8069b2b)
